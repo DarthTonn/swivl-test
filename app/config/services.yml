@@ -1,0 +1,15 @@
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+
+services:
+    classroom.service:
+        class: SwivlClassroomBundle\Services\ClassroomService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    classroom_controller.service:
+        class: SwivlClassroomBundle\Controller\DefaultController
+        arguments:
+            - "@doctrine.orm.entity_manager"
