@@ -2,8 +2,7 @@
 
 namespace SwivlClassroomBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\DataFixtures\{AbstractFixture, OrderedFixtureInterface};
 use Doctrine\Common\Persistence\ObjectManager;
 use SwivlClassroomBundle\Entity\Classroom;
 
@@ -16,25 +15,20 @@ class LoadClassroomsEntityData extends AbstractFixture implements OrderedFixture
     {
         $date = new \DateTime('now');
 
-        $type1 = new Classroom();
-        $type1
+        $type1 = (new Classroom())
             ->setName('math class')
             ->setCreatedDate($date)
-            ->setIsActive(random_int(0,1))
-        ;
-        $type2 = new Classroom();
-        $type2
+            ->setIsActive(random_int(0, 1));
+
+        $type2 = (new Classroom())
             ->setName('language class')
             ->setCreatedDate($date)
-            ->setIsActive(random_int(0,1))
-        ;
-        $type3 = new Classroom();
-        $type3
+            ->setIsActive(random_int(0, 1));
+
+        $type3 = (new Classroom())
             ->setName('code class')
             ->setCreatedDate($date)
-            ->setIsActive(random_int(0,1))
-
-        ;
+            ->setIsActive(random_int(0, 1));
 
 
         $manager->persist($type1);
@@ -47,7 +41,7 @@ class LoadClassroomsEntityData extends AbstractFixture implements OrderedFixture
     /**
      * {@inheritDoc}
      */
-    public function getOrder()
+    public function getOrder(): int
     {
         return 0;
     }

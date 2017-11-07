@@ -4,12 +4,4 @@ parameters:
     #parameter_name: value
 
 services:
-    classroom.service:
-        class: SwivlClassroomBundle\Services\ClassroomService
-        arguments:
-            - "@doctrine.orm.entity_manager"
 
-    classroom_controller.service:
-        class: SwivlClassroomBundle\Controller\DefaultController
-        arguments:
-            - "@doctrine.orm.entity_manager"

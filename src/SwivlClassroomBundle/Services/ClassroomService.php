@@ -8,6 +8,11 @@ use SwivlClassroomBundle\Entity\Classroom;
 use SwivlClassroomBundle\Utils\MessageConstantBag;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ClassroomService
+ *
+ * @package SwivlClassroomBundle\Services
+ */
 class ClassroomService extends FOSRestController implements ClassroomInterface
 {
     /**
@@ -28,21 +33,15 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function getAll(): Response
     {
-        $em = $this->em;
-
-        $result = $em
+        $result = $this->em
             ->getRepository(Classroom::class)
             ->getAllClasses();
 
         if (empty($result)) {
-            return new Response(MessageConstantBag::NO_RESULT,
-                Response::HTTP_NOT_FOUND
-            );
+            return new Response(MessageConstantBag::NO_RESULT, Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(json_encode($result),
-            Response::HTTP_NOT_FOUND
-        );
+        return new Response(json_encode($result), Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -50,20 +49,16 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function getById(int $id): Response
     {
-        $em = $this->em;
-
-        $result = $em
+        $result = $this->em
             ->getRepository(Classroom::class)
             ->getClassById($id);
 
         if ($result === null) {
-            return new Response(MessageConstantBag::NO_RESULT,
-                Response::HTTP_NOT_FOUND
+            return new Response(MessageConstantBag::NO_RESULT, Response::HTTP_NOT_FOUND
             );
         }
-        return new Response(json_encode($result),
-            Response::HTTP_CREATED
-        );
+
+        return new Response(json_encode($result), Response::HTTP_CREATED);
     }
 
     /**
@@ -71,22 +66,17 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function create(): Response
     {
-        $em = $this->em;
-
-        $classroom = new Classroom();
-
         $name = $this->getCurrentRequestParams()->get('name');
         $isActive = $this->getCurrentRequestParams()->get('is_active');
 
-        $classroom->setName($name);
-        $classroom->setIsActive($isActive);
+        $classroom = (new Classroom())
+            ->setName($name)
+            ->setIsActive($isActive);
 
-        $em->persist($classroom);
-        $em->flush();
+        $this->em->persist($classroom);
+        $this->em->flush();
 
-        return new Response(MessageConstantBag::CREATED_SUCCESSFULLY,
-            Response::HTTP_CREATED
-        );
+        return new Response(MessageConstantBag::CREATED_SUCCESSFULLY, Response::HTTP_CREATED);
     }
 
     /**
@@ -94,29 +84,22 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function update(int $id): Response
     {
-        $em = $this->em;
-
         $name = $this->getCurrentRequestParams()->get('name');
         $isActive = $this->getCurrentRequestParams()->get('is_active');
 
         /** @var Classroom $classroom */
-        $classroom = $em->getRepository(Classroom::class)
-            ->find($id);
+        $classroom = $this->em->getRepository(Classroom::class)->find($id);
 
-        if (empty($classroom)) {
-            return new Response(MessageConstantBag::NO_RESULT,
-                Response::HTTP_NOT_FOUND
-            );
+        if ($classroom === null) {
+            return new Response(MessageConstantBag::NO_RESULT, Response::HTTP_NOT_FOUND);
         }
 
-        $classroom->setName($name);
-        $classroom->setIsActive($isActive);
+        $classroom->setName($name)
+            ->setIsActive($isActive);
 
-        $em->flush();
+        $this->em->flush();
 
-        return new Response(MessageConstantBag::UPDATED_SUCCESSFULLY,
-            Response::HTTP_CREATED
-        );
+        return new Response(MessageConstantBag::UPDATED_SUCCESSFULLY, Response::HTTP_CREATED);
     }
 
     /**
@@ -124,23 +107,16 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function delete(int $id): Response
     {
-        $em = $this->em;
-
-        $classroom = $em->getRepository(Classroom::class)
-            ->find($id);
+        $classroom = $this->em->getRepository(Classroom::class)->find($id);
 
         if (empty($classroom)) {
-            return new Response(MessageConstantBag::NO_RESULT,
-                Response::HTTP_NOT_FOUND
-            );
+            return new Response(MessageConstantBag::NO_RESULT, Response::HTTP_NOT_FOUND);
         }
 
-        $em->remove($classroom);
-        $em->flush();
+        $this->em->remove($classroom);
+        $this->em->flush();
 
-        return new Response(MessageConstantBag::DELETED_SUCCESSFULLY,
-            Response::HTTP_OK
-        );
+        return new Response(MessageConstantBag::DELETED_SUCCESSFULLY, Response::HTTP_OK);
     }
 
     /**
@@ -148,27 +124,20 @@ class ClassroomService extends FOSRestController implements ClassroomInterface
      */
     public function patch(int $id): Response
     {
-        $em = $this->em;
-
         $isActive = $this->getCurrentRequestParams()->get('is_active');
 
         /** @var Classroom $classroom */
-        $classroom = $em->getRepository(Classroom::class)
-            ->find($id);
+        $classroom = $this->em->getRepository(Classroom::class)->find($id);
 
         if (empty($classroom)) {
-            return new Response(MessageConstantBag::NO_RESULT,
-                Response::HTTP_NOT_FOUND
-            );
+            return new Response(MessageConstantBag::NO_RESULT, Response::HTTP_NOT_FOUND);
         }
 
         $classroom->setIsActive($isActive);
 
-        $em->flush();
+        $this->em->flush();
 
-        return new Response(MessageConstantBag::FIELD_UPDATED_SUCCESSGULLY,
-            Response::HTTP_OK
-        );
+        return new Response(MessageConstantBag::FIELD_UPDATED_SUCCESSFULLY, Response::HTTP_OK);
     }
 
     /**
