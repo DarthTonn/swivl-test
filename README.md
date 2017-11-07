@@ -7,4 +7,6 @@ pay attention on parameters)
 4. `php bin/console doctrine:fixtures:load` (type `y` end press enter)
 5. `sudo bash deploy.sh`
 6. `php bin/console server:run`
-7. And go to 127.0.0.1:8000 or  in browser
+7. And go to 127.0.0.1:8000/classroom/ in browser
+
+All methods are in src/SwivlClassroomBundle/Controller/DefaultController.php
